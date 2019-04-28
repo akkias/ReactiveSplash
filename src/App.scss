@@ -1,0 +1,58 @@
+@import "assets/css/tailwind.css";
+* {
+  box-sizing: border-box;
+}
+body {
+  color: #1A202C;
+  font-family: "public sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a {
+  text-decoration: inherit;
+}
+ion-icon {
+  font-size: 16px;
+}
+.images--container {
+  .image-card {
+      list-style: none;
+      width: calc(100% / 4 * 1)
+    }
+}
+.collection-card {
+  &-images {
+    img {
+      &:first-child {
+        padding-bottom: 2px;
+      }
+      &:nth-child(3) {
+        padding: 0 2px;
+      }
+    }
+  }
+}
+
+.logo {
+  -webkit-animation: rotation 5s infinite linear;
+}
+
+@-webkit-keyframes rotation {
+  from {
+      -webkit-transform: rotate(0deg);
+  }
+  to {
+      -webkit-transform: rotate(359deg);
+  }
+}
+.photo-details {
+  &-sidebar,
+  &-viewer {
+    height: calc(100vh - 72px);
+  }
+}
