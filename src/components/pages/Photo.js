@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Unsplash, { toJson } from "unsplash-js";
+import Spinner from '../../assets/images/oval.svg'
 require('dotenv').config();
 
  
@@ -12,17 +13,18 @@ class Photo extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            isLoading: true,
             photoDetails: []
         }
     }
     componentDidMount() {
-        unsplash.photos.getPhoto("PrQqQVPzmlw")
+        unsplash.photos.getPhoto(this.props.match.params.id)
         .then(toJson)
         .then(json => {
             this.setState ({
-                photoDetails: json
+                photoDetails: json,
+                isLoading: false
             });
-            console.log(json)
         }) 
     }
     render() {
@@ -30,7 +32,7 @@ class Photo extends Component {
             <main className="pt-12 mb-0 m-6">
                 <section className="photo-details">
                     <div className="flex">
-                    {this.state.photoDetails && this.state.photoDetails.user && 
+                    {!this.state.isLoading ?
                         <>
                             <div className="w-3/4 pr-6 pb-6 overflow-y-auto photo-details-viewer">
                                 <img alt={this.state.photoDetails.alt_description} src={this.state.photoDetails.urls.regular} className="w-full" />
@@ -79,27 +81,27 @@ class Photo extends Component {
                                     <div className="flex flex-wrap">
                                         <div className="w-1/3 mb-4">
                                             <h5 className="mb-2 mt-0 font-normal">Camera Make</h5>
-                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.make}</h3>
+                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.make || `--`}</h3>
                                         </div>
                                         <div className="w-1/3 mb-4">
                                             <h5 className="mb-2 mt-0 font-normal">Camera Model</h5>
-                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.model}</h3>
+                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.model || `--`}</h3>
                                         </div>
                                         <div className="w-1/3 mb-4">
                                             <h5 className="mb-2 mt-0 font-normal">Focal Length</h5>
-                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.focal_length}mm</h3>
+                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.focal_length || `--`}{this.state.photoDetails.exif.focal_length && `mm`}</h3>
                                         </div>
                                         <div className="w-1/3 mb-4">
                                             <h5 className="mb-2 mt-0 font-normal">Aperture</h5>
-                                            <h3 className="text-sm m-0 font-semibold">ƒ/{this.state.photoDetails.exif.aperture}</h3>
+                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.aperture && `ƒ/`}{this.state.photoDetails.exif.aperture || `--`}</h3>
                                         </div>
                                         <div className="w-1/3 mb-4">
                                             <h5 className="mb-2 mt-0 font-normal">Shutter Speed</h5>
-                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.exposure_time}</h3>
+                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.exposure_time || `--`}</h3>
                                         </div>
                                         <div className="w-1/3 mb-4">
                                             <h5 className="mb-2 mt-0 font-normal">ISO</h5>
-                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.iso}</h3>
+                                            <h3 className="text-sm m-0 font-semibold">{this.state.photoDetails.exif.iso || `--`}</h3>
                                         </div>
                                         <div className="w-1/3 mb-4">
                                             <h5 className="mb-2 mt-0 font-normal">Dimensions</h5>
@@ -109,6 +111,7 @@ class Photo extends Component {
                                 </div>
                             </div>
                         </>
+                        : <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
                     }
                     </div>
                 </section>

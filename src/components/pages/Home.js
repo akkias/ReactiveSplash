@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
 import Unsplash, { toJson } from "unsplash-js";
+import Spinner from '../../assets/images/oval.svg'
 require('dotenv').config();
 
 
@@ -20,6 +21,7 @@ class Home extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            isLoading: true,
             images: []
         }
     }
@@ -28,9 +30,9 @@ class Home extends Component {
         .then(toJson)
         .then(json => {
             this.setState ({
-                images: json
+                images: json,
+                isLoading: false
             })
-            console.log(json)
         });
     }
     render() {
@@ -39,7 +41,7 @@ class Home extends Component {
             <main className="mt-24 m-6">
                 <section className="px-12">
                     <h1 className="text-3xl">ReactSplash is built on the top of Unsplash APIs</h1>
-                {this.state.images && this.state.images.length > 0 &&
+                {!this.state.isLoading ?
                     <Masonry
                     className={'images--container p-0 -mx-4'} // default ''
                     options={masonryOptions} // default {}
@@ -53,6 +55,7 @@ class Home extends Component {
                         })
                     }
                     </Masonry>
+                    : <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
                 }
             </section>
         </main>

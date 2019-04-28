@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Unsplash, { toJson } from "unsplash-js";
+import Spinner from '../../assets/images/oval.svg'
 require('dotenv').config();
 
 
@@ -14,6 +15,7 @@ class Collections extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            isLoading: true,
             collections: []
         }
     }
@@ -22,7 +24,8 @@ class Collections extends Component {
         .then(toJson)
         .then(json => {
             this.setState ({
-                collections: json
+                collections: json,
+                isLoading: false
             })
             console.log(json)
         });
@@ -34,7 +37,7 @@ class Collections extends Component {
             <section className="px-12">
                 <h1 className="text-3xl">Collections</h1>
                 <div className="flex flex-wrap -mx-4">
-                    {this.state.collections && this.state.collections.length > 0 &&
+                    {!this.state.isLoading ?
                     this.state.collections.map(collection => {
                         return (
                             <div key={collection.id} className="w-1/3 p-4 collection-card">
@@ -60,6 +63,7 @@ class Collections extends Component {
                             </div>
                             )
                         })
+                        : <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
                     }
                 </div>
             </section>

@@ -1,13 +1,15 @@
 import React from 'react';
 import Logo from '../assets/images/logo.svg'
-import {NavLink} from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 
 const Header = (props) => {
     return(
         <nav className="bg-white z-10 top-0 w-full flex items-center justify-between flex-wrap px-6 py-4 fixed">
             <div className="flex items-center flex-shrink-0 absolute">
-                <img className="logo" src={Logo} alt="Reactive Unsplash" height="20" />
-                <span className="hidden font-semibold text-xl tracking-tight">Tailwind CSS</span>
+                <Link to="/">
+                    <img className="logo" src={Logo} alt="Reactive Unsplash" height="20" />
+                    <span className="hidden font-semibold text-xl tracking-tight">Tailwind CSS</span>
+                </Link>
             </div>
             <div className="block lg:hidden">
                 <button className="flex items-center px-3 py-2 border rounded hover:text-white hover:border-white">
