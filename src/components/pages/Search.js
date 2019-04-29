@@ -49,7 +49,7 @@ class Search extends Component {
                             </h1>
                         </div>
                         <Masonry
-                        className={'images--container p-0 -mx-4'} // default ''
+                        className={'images-container p-0 -mx-4'} // default ''
                         options={masonryOptions} // default {}
                         disableImagesLoaded={false} // default false
                         updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const ImageCard = (props) => {
     return (
-        <figure className="text-xs image-card m-0 p-4 d-block" key={props.image.id}>
+        <figure className="text-xs image-card w-1/1 sm:w-1/2 md:w-1/3 lg:w-1/4 m-0 p-4 d-block" key={props.image.id}>
             <Link to={`/photo/${props.image.id}`}>
                 <img className="w-full block" src={props.image.urls.regular} alt={props.image.alt_description} />
             </Link>

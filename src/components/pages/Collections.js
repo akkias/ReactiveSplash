@@ -8,18 +8,24 @@ import Spinner from '../../assets/images/oval.svg'
 class Collections extends Component {
     constructor(props) {
         super(props)
+        this._isMounted = false;
         this.state = {
             isLoading: true,
             collections: []
         }
     }
     componentDidMount() {
+        this._isMounted = true;
         this.fetchCollections();
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+     }
     fetchCollections = () => {
         unsplash.collections.listCollections(1, 15, "latest")
         .then(toJson)
         .then(json => {
+            this._isMounted &&
             this.setState ({
                 collections: json,
                 isLoading: false
@@ -27,7 +33,6 @@ class Collections extends Component {
         });
     }
     render() {
-
         return(
             <main className="m-6">
                 <section className="px-12">
@@ -36,7 +41,7 @@ class Collections extends Component {
                         {!this.state.isLoading ?
                         this.state.collections.map(collection => {
                             return (
-                                <div key={collection.id} className="w-1/3 p-4 collection-card">
+                                <div key={collection.id} className="w-1/1 sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 p-4 collection-card">
                                     <Link to={`/collections/${collection.id}`} className="text-gray-700 hover:text-blue-600 hover:opacity-75">
                                         <figure className="m-0 flex flex-wrap rounded overflow-hidden collection-card-images">
                                             {collection.preview_photos.map((photo, i) => {

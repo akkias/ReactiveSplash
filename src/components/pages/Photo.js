@@ -10,20 +10,25 @@ const unsplash = new Unsplash({
 class Photo extends Component {
     constructor(props) {
         super(props)
+        this._isMounted = false;
         this.state = {
             isLoading: true,
             photoDetails: []
         }
     }
     componentDidMount() {
+        this._isMounted = true;
         unsplash.photos.getPhoto(this.props.match.params.id)
         .then(toJson)
         .then(json => {
-            this.setState ({
+            this._isMounted && this.setState ({
                 photoDetails: json,
                 isLoading: false
             });
         }) 
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     render() {
         return(

@@ -12,6 +12,7 @@ import Spinner from '../../assets/images/oval.svg'
 class Collection extends Component {
     constructor(props) {
         super(props)
+        this._isMounted = false;
         this.state = {
             isLoading: true,
             collectionDetails: [],
@@ -19,28 +20,30 @@ class Collection extends Component {
         }
     }
     componentDidMount() {
+        this._isMounted = true;
         this.fetchCollection();
         this.fetchCollectionPhotos();
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     fetchCollection = () => {
         unsplash.collections.getCollection(this.props.match.params.id)
         .then(toJson)
         .then(json => {
-            this.setState ({
+            this._isMounted && this.setState ({
                 collectionDetails: json
             });
-            console.log(json)
         }) 
     }
     fetchCollectionPhotos = () => {
         unsplash.collections.getCollectionPhotos(this.props.match.params.id, 1, 12, 'latest')
         .then(toJson)
         .then(json => {
-            this.setState ({
+            this._isMounted && this.setState ({
                 images: json,
                 isLoading: false
             })
-            console.log(json)
         });
     }
     render() {
@@ -57,7 +60,7 @@ class Collection extends Component {
                             </Link>
                         </div>
                         <Masonry
-                        className={'images--container p-0 -mx-4'} // default ''
+                        className={'images-container p-0 -mx-4'} // default ''
                         options={masonryOptions} // default {}
                         disableImagesLoaded={false} // default false
                         updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false

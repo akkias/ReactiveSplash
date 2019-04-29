@@ -20,7 +20,6 @@ const composedEnhancers = compose(
   ...enhancers
 );
 
-
 export default () => {
   const store = createStore(persistedReducer, {}, composedEnhancers);
   return { store, persistor: persistStore(store) };
