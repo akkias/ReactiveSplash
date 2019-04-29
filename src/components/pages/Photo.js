@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Unsplash, { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
-require('dotenv').config();
-
  
 const unsplash = new Unsplash({
     applicationId: '79ed20d847b11284f0c086533621e0635180afc296773f5aa6a180377afe7f5c',
@@ -76,7 +74,7 @@ class Photo extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="border-b border-l-0 border-t-0 border-r-0 border-solid border-gray-300 pt-4">
+                                <div className="pt-4">
                                     <h4 className="mb-3 mt-0 text-xs font-normal text-gray-700">EXIF DATA</h4>
                                     <div className="flex flex-wrap">
                                         <div className="w-1/3 mb-4">

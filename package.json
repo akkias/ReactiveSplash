@@ -6,7 +6,12 @@
     "node-sass": "^4.12.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.8"
+    "react-redux": "^7.0.3",
+    "react-scripts": "2.1.8",
+    "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^5.10.0",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "tailwind:css": "tailwind build src/assets/css/tailwind.src.css -c  tailwind.js -o src/assets/css/tailwind.css",
@@ -27,6 +32,7 @@
   "devDependencies": {
     "axios": "^0.18.0",
     "dotenv": "^7.0.0",
+    "history": "^4.9.0",
     "react-infinite-scroller": "^1.2.4",
     "react-masonry-component": "^6.2.1",
     "react-router-dom": "^5.0.0",

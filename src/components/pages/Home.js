@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
 import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
-import Unsplash, { toJson } from "unsplash-js";
-import Spinner from '../../assets/images/oval.svg'
-require('dotenv').config();
+import { toJson } from "unsplash-js";
+import { unsplash, masonryOptions, getQueryStringValue } from '../../utils/Utils';
+import Spinner from '../../assets/images/oval.svg';
 
 
-
-const masonryOptions = {
-    transitionDuration: 0,
-    columnWidth: '.image-card'
-};
- 
-const unsplash = new Unsplash({
-    applicationId: '79ed20d847b11284f0c086533621e0635180afc296773f5aa6a180377afe7f5c',
-    secret: '0a205b1a20b781e844b43baf3e9f4027cb07b8dfd0fa80fbb4d93b6e8133ed69'
-});
 
 class Home extends Component {
     constructor(props) {
@@ -26,6 +16,18 @@ class Home extends Component {
         }
     }
     componentDidMount() {
+        this.fetchLatestPhotos();
+        if(window.location.href.indexOf('?code=').length > 0) {
+            let token = getQueryStringValue('code');
+            unsplash.auth.userAuthentication(token)
+            .then(toJson)
+            .then(json => {
+                unsplash.auth.setBearerToken(json.access_token);
+            });
+        }
+
+    }
+    fetchLatestPhotos = () => {
         unsplash.photos.listPhotos(1, 15, "latest")
         .then(toJson)
         .then(json => {
@@ -34,9 +36,8 @@ class Home extends Component {
                 isLoading: false
             })
         });
-    }
+    } 
     render() {
-        
         return(
             <main className="mt-24 m-6">
                 <section className="px-12">
@@ -50,7 +51,7 @@ class Home extends Component {
                     >
                         {this.state.images.map(image => {
                             return(
-                                <ImageCard image={image} />
+                                <ImageCard key={image.id} image={image} />
                             )
                         })
                     }

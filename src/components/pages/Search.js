@@ -1,60 +1,52 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
 import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
-import { toJson } from "unsplash-js";
-import { unsplash, masonryOptions } from '../../utils/Utils';
+import {withRouter} from 'react-router-dom';
+import Unsplash, { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
 
 
 
+const masonryOptions = {
+    transitionDuration: 0,
+    columnWidth: '.image-card'
+};
+ 
+const unsplash = new Unsplash({
+    applicationId: '79ed20d847b11284f0c086533621e0635180afc296773f5aa6a180377afe7f5c',
+    secret: '0a205b1a20b781e844b43baf3e9f4027cb07b8dfd0fa80fbb4d93b6e8133ed69'
+});
 
-class Collection extends Component {
+class Search extends Component {
     constructor(props) {
         super(props)
         this.state = {
             isLoading: true,
-            collectionDetails: [],
-            images: []
+            results: []
         }
     }
     componentDidMount() {
-        this.fetchCollection();
-        this.fetchCollectionPhotos();
-    }
-    fetchCollection = () => {
-        unsplash.collections.getCollection(this.props.match.params.id)
+        unsplash.search.photos(this.props.match.params.query, 1, 12)
         .then(toJson)
         .then(json => {
             this.setState ({
-                collectionDetails: json
-            });
-            console.log(json)
-        }) 
-    }
-    fetchCollectionPhotos = () => {
-        unsplash.collections.getCollectionPhotos(this.props.match.params.id, 1, 12, 'latest')
-        .then(toJson)
-        .then(json => {
-            this.setState ({
-                images: json,
+                results: json,
                 isLoading: false
             })
             console.log(json)
         });
     }
     render() {
+        
         return(
-            <main className="m-6">
+            <main className="mt-24 m-6">
             <section className="px-12">
                 {!this.state.isLoading ?
                     <>
                         <div className="mb-8">
-                            <h1 className="text-3xl mb-2">{this.state.collectionDetails.title} <small className="font-normal text-sm text-gray-600">({this.state.collectionDetails.total_photos} photos)</small></h1>
-                            <Link className="text-sm text-gray-900">
-                                <img className="align-middle mr-2 rounded-full h-8 w-8" alt={this.state.collectionDetails.user.name} src={this.state.collectionDetails.user.profile_image.medium} />
-                                {this.state.collectionDetails.user.name}
-                            </Link>
+                            <h1 className="text-3xl mb-2">
+                                {this.props.match.params.query}
+                            </h1>
                         </div>
                         <Masonry
                         className={'images--container p-0 -mx-4'} // default ''
@@ -62,7 +54,7 @@ class Collection extends Component {
                         disableImagesLoaded={false} // default false
                         updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
                         >
-                            {this.state.images.map(image => {
+                            {this.state.results.results.map(image => {
                                 return(
                                     <ImageCard key={image.id} image={image} />
                                 )
@@ -77,4 +69,4 @@ class Collection extends Component {
     )
 }
 }
-export default Collection;
+export default withRouter(Search);

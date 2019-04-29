@@ -1,8 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Logo from '../assets/images/logo.svg'
-import {Link, NavLink} from 'react-router-dom';
+import {Link, NavLink, withRouter} from 'react-router-dom';
+import {createBrowserHistory} from 'history';
+import { authenticationUrl } from '../utils/Utils'
 
+const history = createBrowserHistory();
 const Header = (props) => {
+    const [query, setQuery] = useState();
+    
+    const handleChange = (event) => {
+        setQuery(event.target.value);
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        history.push(`/search/photos/${query}`);
+    }
+
+    const navigateToAuth = () => {
+        window.location.assign(authenticationUrl);
+    }
+
     return(
         <nav className="bg-white z-10 top-0 w-full flex items-center justify-between flex-wrap px-6 py-4 fixed">
             <div className="flex items-center flex-shrink-0 absolute">
@@ -25,17 +42,17 @@ const Header = (props) => {
                         Collections
                     </NavLink>
                 </div>
-                <form className="lg:flex-grow mx-8">
+                <form className="lg:flex-grow mx-8" onSubmit={handleSubmit}>
                     <div className="flex items-center border-0 border-b border-solid border-gray-600 pb-1">
                         <ion-icon name="search"></ion-icon>                   
-                        <input className="text-sm border-none w-full text-gray-900 mr-3 py-1 px-2 focus:outline-none" type="text" placeholder="Search free high-resolution photos" aria-label="Full name" />
+                        <input value={query || props.match.params.query} onChange={handleChange} className="text-sm border-none w-full text-gray-900 mr-3 py-1 px-2 focus:outline-none" type="text" placeholder="Search free high-resolution photos" />
                     </div>
                 </form>
                 {!props.isAuthenticated &&
-                    <button className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-4 lg:mt-0">Signin</button>
+                    <button onClick={navigateToAuth} className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-4 lg:mt-0">Signin</button>
                 }
             </div>
         </nav>
     )
 }
-export default Header;
+export default withRouter(Header);
