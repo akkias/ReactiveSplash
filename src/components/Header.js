@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import Logo from '../assets/images/logo.svg'
 import {Link, NavLink, withRouter} from 'react-router-dom';
-import {createBrowserHistory} from 'history';
-import { authenticationUrl } from '../utils/Utils'
+import { authenticationUrl, history } from '../utils/Utils'
 
-const history = createBrowserHistory();
 const Header = (props) => {
     const [query, setQuery] = useState();
     
@@ -48,6 +46,7 @@ const Header = (props) => {
                         <input value={query || props.match.params.query} onChange={handleChange} className="text-sm border-none w-full text-gray-900 mr-3 py-1 px-2 focus:outline-none" type="text" placeholder="Search free high-resolution photos" />
                     </div>
                 </form>
+                aa{props.isAuthenticated}
                 {!props.isAuthenticated &&
                     <button onClick={navigateToAuth} className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-4 lg:mt-0">Signin</button>
                 }

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
 import { toJson } from "unsplash-js";
-import { unsplash, masonryOptions, getQueryStringValue } from '../../utils/Utils';
+import {connect} from 'react-redux';
+import { unsplash, masonryOptions } from '../../utils/Utils';
 import Spinner from '../../assets/images/oval.svg';
 
 
@@ -17,15 +18,6 @@ class Home extends Component {
     }
     componentDidMount() {
         this.fetchLatestPhotos();
-        if(window.location.href.indexOf('?code=').length > 0) {
-            let token = getQueryStringValue('code');
-            unsplash.auth.userAuthentication(token)
-            .then(toJson)
-            .then(json => {
-                unsplash.auth.setBearerToken(json.access_token);
-            });
-        }
-
     }
     fetchLatestPhotos = () => {
         unsplash.photos.listPhotos(1, 15, "latest")
@@ -63,4 +55,7 @@ class Home extends Component {
     )
 }
 }
-export default Home;
+const mapStateToProps = state => ({
+    ...state
+})
+export default connect(mapStateToProps)(Home);
