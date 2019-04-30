@@ -9,7 +9,7 @@ const Header = (props) => {
     const handleChange = (event) => {
         setQuery(event.target.value);
     }
-    const handleSubmit = (event) => {
+    const handleSearch = (event) => {
         event.preventDefault();
         history.push(`/search/photos/${query}`);
     }
@@ -40,15 +40,16 @@ const Header = (props) => {
                         Collections
                     </NavLink>
                 </div>
-                <form className="lg:flex-grow mx-8" onSubmit={handleSubmit}>
+                <form className="lg:flex-grow mx-8" onSubmit={handleSearch}>
                     <div className="flex items-center border-0 border-b border-solid border-gray-600 pb-1">
                         <ion-icon name="search"></ion-icon>                   
                         <input value={query || props.match.params.query} onChange={handleChange} className="text-sm border-none w-full text-gray-900 mr-3 py-1 px-2 focus:outline-none" type="text" placeholder="Search free high-resolution photos" />
                     </div>
                 </form>
-                aa{props.isAuthenticated}
-                {!props.isAuthenticated &&
-                    <button onClick={navigateToAuth} className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-4 lg:mt-0">Signin</button>
+                {!props.isAuthenticated ?
+                    <button onClick={navigateToAuth} className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-4 lg:mt-0">Sign in</button>
+                    : 
+                    <button onClick={navigateToAuth} className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-4 lg:mt-0">Sign out</button>
                 }
             </div>
         </nav>
