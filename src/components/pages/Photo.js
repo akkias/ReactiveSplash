@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import Unsplash, { toJson } from "unsplash-js";
+import { toJson } from "unsplash-js";
+import { unsplash} from '../../utils/Utils';
 import Spinner from '../../assets/images/oval.svg'
- 
-const unsplash = new Unsplash({
-    applicationId: '79ed20d847b11284f0c086533621e0635180afc296773f5aa6a180377afe7f5c',
-    secret: '0a205b1a20b781e844b43baf3e9f4027cb07b8dfd0fa80fbb4d93b6e8133ed69'
-});
 class Photo extends Component {
     constructor(props) {
         super(props)

@@ -9,6 +9,7 @@ const ImageCard = (props) => {
             </Link>
             <div className="mt-1 flex items-center font-semibold">
                 <Link to="/" className="p-1 text-gray-900 hover:text-blue-600">{props.image.user.name}</Link>
+                {props.image.id}
                 <button className="bg-transparent hover:bg-gray-200 flex items-center rounded cursor-pointer font-semibold p-1 ml-auto border-0">
                     <ion-icon class="align-middle mr-1" name="heart-empty"></ion-icon>{props.image.likes}
                 </button>
