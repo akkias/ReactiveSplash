@@ -48,7 +48,7 @@ class Collection extends Component {
     }
     render() {
         return(
-            <main className="m-6">
+            <main className="mt-24 m-6">
             <section className="px-12">
                 {!this.state.isLoading ?
                     <>

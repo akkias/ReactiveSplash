@@ -8,12 +8,12 @@ import rootReducer from './reducers/rootReducer';
 const enhancers = [];
 const middleware = [thunk,logger];
 
-const persistConfig = {
+const rootPersistConfig = {
   key: 'root',
   storage
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 const composedEnhancers = compose(
   applyMiddleware(...middleware),

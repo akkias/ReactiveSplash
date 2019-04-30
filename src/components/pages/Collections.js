@@ -34,7 +34,7 @@ class Collections extends Component {
     }
     render() {
         return(
-            <main className="m-6">
+            <main className="mt-24 m-6">
                 <section className="px-12">
                     <h1 className="text-3xl">Collections</h1>
                     <div className="flex flex-wrap -mx-4">

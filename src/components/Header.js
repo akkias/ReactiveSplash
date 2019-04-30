@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Logo from '../assets/images/logo.svg'
 import {Link, NavLink, withRouter} from 'react-router-dom';
-import { authenticationUrl, history } from '../utils/Utils'
+import { authenticationUrl } from '../utils/Utils'
 
 const Header = (props) => {
     const [query, setQuery] = useState();
@@ -11,7 +11,7 @@ const Header = (props) => {
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        history.push(`/search/photos/${query}`);
+        props.history.push(`/search/photos/${query}`);
     }
 
     const navigateToAuth = () => {
@@ -21,7 +21,7 @@ const Header = (props) => {
     return(
         <nav className="bg-white z-10 top-0 w-full flex items-center justify-between flex-wrap px-6 py-4 fixed">
             <div className="flex items-center flex-shrink-0 absolute">
-                <Link to="/">
+                <Link to="/" className="cursor-pointer">
                     <img className="logo" src={Logo} alt="Reactive Unsplash" height="20" />
                     <span className="hidden font-semibold text-xl tracking-tight">Tailwind CSS</span>
                 </Link>
@@ -43,9 +43,9 @@ const Header = (props) => {
                         </div>
                     </form>
                     {!props.isAuthenticated ?
-                        <button onClick={navigateToAuth} className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-0">Signin</button>
+                        <button onClick={navigateToAuth} className="bg-green-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-0 cursor-pointer">Sign In</button>
                         :
-                        <button onClick={props.logout()} className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-0">Signout</button>
+                        <button onClick={() => props.logout()} className="bg-gray-300 border-0 inline-block text-sm px-4 py-2 leading-none rounded mt-0 cursor-pointer">Sign Out</button>
                     }
                 </div>
             </div>
