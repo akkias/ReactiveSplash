@@ -3,7 +3,6 @@ import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
 import { unsplash, masonryOptions } from '../../utils/Utils';
 import {withRouter} from 'react-router-dom';
-import { unsplash, masonryOptions } from '../../utils/Utils';
 import { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
 import { SearchTabs } from './SearchTabs';
