@@ -10,6 +10,8 @@ import Search from './components/pages/Search';
 import { unsplash, getQueryStringValue, history } from './utils/Utils';
 import { AuthenticateUser, LogoutUser } from './redux/actions/AuthenticateUser'
 import { toJson } from "unsplash-js";
+import SearchUsers from './components/pages/SearchUsers';
+import SearchCollections from './components/pages/SearchCollections';
 
 
 class App extends Component {
@@ -45,8 +47,8 @@ class App extends Component {
         {/* {window.location.href.toString().includes('?code') && this.props.auth.isAuthenticated && <Redirect to="/" />} */}
         <Header logout={this.logout} isAuthenticated={this.props.auth.isAuthenticated} />
         <Switch>
-            <Route path="/search/collections/:query" component={Search}></Route>
-            <Route path="/search/users/:query" component={Search}></Route>
+            <Route path="/search/collections/:query" component={SearchCollections}></Route>
+            <Route path="/search/users/:query" component={SearchUsers}></Route>
             <Route path="/search/photos/:query" component={Search}></Route>
             <Route path="/collections/:id" component={Collection}></Route>
             <Route path="/collections" component={Collections}></Route>

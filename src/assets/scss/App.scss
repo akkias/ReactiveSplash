@@ -26,6 +26,7 @@ ion-icon {
 .images-container {
   .image-card {
       list-style: none;
+      transition: ease-in-out .2s;
     }
 }
 .collection-card {
@@ -50,4 +51,17 @@ ion-icon {
   top: calc(50% - 54px);
   left: 0;
   right: 0;
+}
+.user-card {
+  transition: ease-in-out .2s;
+}
+.user-card--uploads {
+  > div {
+      &:first-child {
+        border-radius: .25rem 0 0 .25rem;
+      }
+      &:last-child {
+        border-radius: 0 .25rem .25rem 0;
+      }
+  }
 }

@@ -26,7 +26,10 @@ export const authenticationUrl = unsplash.auth.getAuthenticationUrl([
     "read_user",
     "write_user",
     "read_photos",
-    "write_photos"
+    "write_photos",
+    "write_likes",
+    "read_collections",
+    "write_collections"
   ]);
 
 export const getQueryStringValue = (key) => {  

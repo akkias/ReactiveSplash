@@ -13,7 +13,6 @@ const Header = (props) => {
         event.preventDefault();
         props.history.push(`/search/photos/${query}`);
     }
-
     const navigateToAuth = () => {
         window.location.assign(authenticationUrl);
     }
