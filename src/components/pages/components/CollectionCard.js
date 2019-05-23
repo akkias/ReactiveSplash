@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const CollectionCard = (props) => {
     return(
-        <div className="w-1/1 sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 p-4 collection-card">
+        <div className="w-1/1 p-4 collection-card sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4">
             <Link to={`/collections/${props.collection.id}`} className="text-gray-700 hover:text-blue-600 hover:opacity-75">
                 <figure className="m-0 flex flex-wrap overflow-hidden collection-card-images">
                     {props.collection.preview_photos.map((photo, i) => {
