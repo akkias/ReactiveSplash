@@ -9,7 +9,7 @@ const Header = (props) => {
     const handleChange = (event) => {
         setQuery(event.target.value);
     }
-    const handleSubmit = (event) => {
+    const handleSearch = (event) => {
         event.preventDefault();
         props.history.push(`/search/photos/${query}`);
     }
