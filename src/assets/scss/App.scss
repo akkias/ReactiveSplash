@@ -1,4 +1,5 @@
-@import "assets/css/tailwind.css";
+@import "../css/tailwind.css";
+@import "animation";
 * {
   box-sizing: border-box;
 }
@@ -19,10 +20,13 @@ a {
 ion-icon {
   font-size: 16px;
 }
-.images--container {
+.logo {
+  -webkit-animation: rotation 5s infinite linear;
+}
+.images-container {
   .image-card {
       list-style: none;
-      width: calc(100% / 4 * 1)
+      transition: ease-in-out .2s;
     }
 }
 .collection-card {
@@ -37,19 +41,6 @@ ion-icon {
     }
   }
 }
-
-.logo {
-  -webkit-animation: rotation 5s infinite linear;
-}
-
-@-webkit-keyframes rotation {
-  from {
-      -webkit-transform: rotate(0deg);
-  }
-  to {
-      -webkit-transform: rotate(359deg);
-  }
-}
 .photo-details {
   &-sidebar,
   &-viewer {
@@ -60,4 +51,17 @@ ion-icon {
   top: calc(50% - 54px);
   left: 0;
   right: 0;
+}
+.user-card {
+  transition: ease-in-out .2s;
+}
+.user-card--uploads {
+  > div {
+      &:first-child {
+        border-radius: .25rem 0 0 .25rem;
+      }
+      &:last-child {
+        border-radius: 0 .25rem .25rem 0;
+      }
+  }
 }

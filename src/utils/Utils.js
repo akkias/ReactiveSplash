@@ -15,8 +15,8 @@ export const unsplash = new Unsplash({
     callbackUrl: process.env.REACT_APP_CALLBACK_URL
 });
 export const unsplashWithToken = (token) => new Unsplash({
-    applicationId: "ddf391f505f5baf951c083a727e15fee2df41e21f8b7829ed62c5427572cb610",
-    secret: "eab18c9cfe44a97ae3b5b17c43b5b4fd12b4d98ca75479f9d229181180000be9",
+    applicationId: process.env.REACT_APP_UNSPLASH_ACCESS_KEY,
+    secret: process.env.REACT_APP_UNSPLASH_SECRET_KEY,
     callbackUrl: process.env.REACT_APP_CALLBACK_URL,
     bearerToken: token
 });
@@ -26,7 +26,10 @@ export const authenticationUrl = unsplash.auth.getAuthenticationUrl([
     "read_user",
     "write_user",
     "read_photos",
-    "write_photos"
+    "write_photos",
+    "write_likes",
+    "read_collections",
+    "write_collections"
   ]);
 
 export const getQueryStringValue = (key) => {  

@@ -3,20 +3,32 @@ import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
 import { unsplash, masonryOptions } from '../../utils/Utils';
 import {withRouter} from 'react-router-dom';
-import Unsplash, { toJson } from "unsplash-js";
+import { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
-
-
+import { SearchTabs } from './SearchTabs';
 
 class Search extends Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this._isMounted = false;
         this.state = {
             isLoading: true,
             results: []
         }
     }
     componentDidMount() {
+        this._isMounted = true;
+        this.triggerSearch();
+    }
+    componentDidUpdate(prevProps) {
+        if(prevProps.match.params.query !== this.props.match.params.query) {
+            this.triggerSearch()
+        }
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+    triggerSearch = () => {
         unsplash.search.photos(this.props.match.params.query, 1, 12)
         .then(toJson)
         .then(json => {
@@ -24,7 +36,6 @@ class Search extends Component {
                 results: json,
                 isLoading: false
             })
-            console.log(json)
         });
     }
     render() {
@@ -33,13 +44,14 @@ class Search extends Component {
             <section className="px-12">
                 {!this.state.isLoading ?
                     <>
-                        <div className="mb-8">
-                            <h1 className="text-3xl mb-2">
-                                {this.props.match.params.query}
-                            </h1>
-                        </div>
+                        <h1 className="text-3xl">
+                            {this.props.match.params.query}
+                        </h1>
+                        {this.state.results &&
+                            <SearchTabs query={this.props.match.params.query} total={this.state.results.total} />
+                        }
                         <Masonry
-                        className={'images--container p-0 -mx-4'} // default ''
+                        className={'images-container p-0 -mx-4'} // default ''
                         options={masonryOptions} // default {}
                         disableImagesLoaded={false} // default false
                         updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false

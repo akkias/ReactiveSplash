@@ -1,29 +1,35 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import Unsplash, { toJson } from "unsplash-js";
+import { toJson } from "unsplash-js";
+import { unsplash } from '../../utils/Utils';
+import {connect} from 'react-redux';
 import Spinner from '../../assets/images/oval.svg'
- 
-const unsplash = new Unsplash({
-    applicationId: '79ed20d847b11284f0c086533621e0635180afc296773f5aa6a180377afe7f5c',
-    secret: '0a205b1a20b781e844b43baf3e9f4027cb07b8dfd0fa80fbb4d93b6e8133ed69'
-});
+import { likePhoto } from '../../redux/actions/HomePhoto';
 class Photo extends Component {
     constructor(props) {
         super(props)
+        this._isMounted = false;
         this.state = {
             isLoading: true,
             photoDetails: []
         }
     }
     componentDidMount() {
+        this._isMounted = true;
         unsplash.photos.getPhoto(this.props.match.params.id)
         .then(toJson)
         .then(json => {
-            this.setState ({
+            this._isMounted && this.setState ({
                 photoDetails: json,
                 isLoading: false
             });
         }) 
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+    likeCurrentPhoto = (token, id)  => {
+        this.props.likePhoto(token, id)
     }
     render() {
         return(
@@ -32,8 +38,8 @@ class Photo extends Component {
                     <div className="flex">
                     {!this.state.isLoading ?
                         <>
-                            <div className="w-3/4 pr-6 pb-6 overflow-y-auto photo-details-viewer">
-                                <img alt={this.state.photoDetails.alt_description} src={this.state.photoDetails.urls.regular} className="w-full" />
+                            <div className="w-3/4 pr-6 pb-6 overflow-y-auto photo-details-viewer flex justify-center">
+                                <img alt={this.state.photoDetails.alt_description} src={this.state.photoDetails.urls.regular} className="max-h-full block" />
                             </div>
                             <div className="w-1/4 pb-4 pl-3 overflow-y-auto photo-details-sidebar">
                                 <Link to={`/${this.state.photoDetails.user.username}`} className="text-sm text-gray-900 flex">
@@ -46,8 +52,8 @@ class Photo extends Component {
                                     </div>
                                 </Link>
                                 <div className="border border-l-0 border-r-0 border-solid border-gray-300 py-4 mt-4 flex justify-center">
-                                    <button className="w-1/3 bg-white hover:text-blue-600 border-0 text-sm px-4 py-2 leading-none rounded cursor-pointer shadow">
-                                        <ion-icon class="align-middle mr-1" name="heart-empty"></ion-icon>{this.state.photoDetails.likes}
+                                    <button onClick={() => this.likeCurrentPhoto(this.props.auth.token, this.state.photoDetails.id)} className="w-1/3 bg-white hover:text-blue-600 border-0 text-sm px-4 py-2 leading-none rounded cursor-pointer shadow">
+                                        <ion-icon class={`align-middle mr-1 ${this.state.photoDetails.liked_by_user && `text-red-600`}`} name={this.state.photoDetails.liked_by_user ? `heart` : `heart-empty`}></ion-icon>{this.state.photoDetails.likes}
                                     </button>
                                     <button className="w-1/3 bg-white hover:text-blue-600 border-0 text-sm px-4 py-2 leading-none rounded mx-4 cursor-pointer shadow">
                                         <ion-icon class="align-middle mr-1" name="add"></ion-icon>Collect
@@ -117,4 +123,10 @@ class Photo extends Component {
         )
     }
 }
-export default Photo;
+const mapStateToProps = state => ({
+    ...state
+})
+const mapDispatchToProps = dispatch => ({
+    likePhoto: (token, id) => dispatch(likePhoto(token, id))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Photo);
