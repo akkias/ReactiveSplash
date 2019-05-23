@@ -6,6 +6,7 @@ import App from './App';
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from './redux/store';
+import { history } from './utils/Utils';
 const { persistor, store } = configureStore();
 
 

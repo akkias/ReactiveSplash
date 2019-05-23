@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
+import { unsplash, masonryOptions } from '../../utils/Utils';
 import {withRouter} from 'react-router-dom';
 import { unsplash, masonryOptions } from '../../utils/Utils';
 import { toJson } from "unsplash-js";
@@ -39,7 +40,6 @@ class Search extends Component {
         });
     }
     render() {
-        
         return(
             <main className="mt-24 m-6">
             <section className="px-12">
