@@ -3,8 +3,8 @@ import {Switch, Route} from 'react-router-dom' ;
 import  { connect } from 'react-redux';
 import Header from './components/Header';
 import Home from './components/pages/Home';
-import Collection from './components/pages/Collection';
-import Collections from './components/pages/Collections';
+import Collection from './components/pages/collections/Collection';
+import Collections from './components/pages/collections/Collections';
 import Photo from './components/pages/Photo';
 import Search from './components/pages/Search';
 import { unsplash, getQueryStringValue, history } from './utils/Utils';
@@ -12,6 +12,9 @@ import { AuthenticateUser, LogoutUser } from './redux/actions/AuthenticateUser'
 import { toJson } from "unsplash-js";
 import SearchUsers from './components/pages/SearchUsers';
 import SearchCollections from './components/pages/SearchCollections';
+import Profile from './components/pages/Profile';
+import UserCollections from './components/pages/profile/UserCollections';
+import UserLikes from './components/pages/profile/UserLikes';
 
 
 class App extends Component {
@@ -53,6 +56,9 @@ class App extends Component {
             <Route path="/collections/:id" component={Collection}></Route>
             <Route path="/collections" component={Collections}></Route>
             <Route exact path="/photo/:id" component={Photo}></Route>
+            <Route exact path="/:username" component={Profile}></Route>
+            <Route path="/:username/likes" component={UserLikes}></Route>
+            <Route path="/:username/collections" component={UserCollections}></Route>
             <Route exact path="/" component={Home}></Route>
         </Switch>
       </>

@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { toJson } from "unsplash-js";
-import Masonry from 'react-masonry-component';
-import { unsplash, masonryOptions } from '../../utils/Utils';
-import Spinner from '../../assets/images/oval.svg';
-import Badge from '../../assets/images/verified.svg'
-import { ProfileTabs } from './profile/ProfileTabs';
-import ImageCard from '../ImageCard';
+import { unsplash } from '../../../utils/Utils';
+import Spinner from '../../../assets/images/oval.svg';
+import Badge from '../../../assets/images/verified.svg'
+import { ProfileTabs } from '../profile/ProfileTabs';
 import {connect} from 'react-redux';
+import CollectionCard from '../collections/CollectionCard';
 
 
-class Profile extends Component {
+class UserCollections extends Component {
     constructor(props) {
         super(props)
         this._isMounted = false;
@@ -18,7 +17,7 @@ class Profile extends Component {
             isProfileLoading: true,
             areUploadsLoading: true,
             profile: [],
-            uploads: []
+            collections: []
         }
     }
     componentDidMount() {
@@ -28,12 +27,12 @@ class Profile extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-    fetchUploads = () => {
-        unsplash.users.photos(this.state.profile.username, 1, 12)
+    fetchCollections = () => {
+        unsplash.users.collections(this.state.profile.username, 1, 15)
         .then(toJson)
         .then(json => {
             this.setState ({
-                uploads: json,
+                collections: json,
                 areUploadsLoading: false
             })
         })
@@ -45,7 +44,7 @@ class Profile extends Component {
             this._isMounted && this.setState ({
                 profile: json,
                 isProfileLoading: false
-            }, () => this.fetchUploads())
+            }, () => this.fetchCollections())
         });
     }
     render() {
@@ -84,23 +83,11 @@ class Profile extends Component {
                         </header>
                     }
                     <ProfileTabs username={profile.username} photosCount={profile.total_photos} likesCount={profile.total_likes} collectionCount={profile.total_collections} />
-                    {this.state.areUploadsLoading ?
-                        <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
-                        :
-                        <Masonry
-                        className={'images-container p-0 mb-24 -mx-4'}
-                        options={masonryOptions}
-                        disableImagesLoaded={false}
-                        updateOnEachImageLoad={false}
-                        >
-                            {this.state.uploads.map(image => {
-                                return(
-                                    <ImageCard token={this.props.auth.token} key={image.id} image={image} />
-                                    )
-                                    })
-                        }
-                       </Masonry>
-                    }
+                    <div className="flex flex-wrap -mx-4">
+                        {this.state.collections.map(collection => 
+                            <CollectionCard collection={collection} key={collection.id} />
+                        )}
+                    </div>
                 </section>
             </main>
         )
@@ -109,4 +96,4 @@ class Profile extends Component {
 const mapStateToProps = state => ({
     ...state
 });
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps)(UserCollections);

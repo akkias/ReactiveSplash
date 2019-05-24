@@ -43,7 +43,8 @@ class Home extends Component {
                     <h1 className="text-3xl">ReactSplash is built on the top of Unsplash APIs</h1>
                     {this.props.home.isLoading ?
                        <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
-                       :  <Masonry
+                       :
+                       <Masonry
                         className={'images-container p-0 -mx-4'}
                         options={masonryOptions}
                         disableImagesLoaded={false}

@@ -2,23 +2,23 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { toJson } from "unsplash-js";
 import Masonry from 'react-masonry-component';
-import { unsplash, masonryOptions } from '../../utils/Utils';
-import Spinner from '../../assets/images/oval.svg';
-import Badge from '../../assets/images/verified.svg'
-import { ProfileTabs } from './profile/ProfileTabs';
-import ImageCard from '../ImageCard';
+import { unsplash, masonryOptions } from '../../../utils/Utils';
+import Spinner from '../../../assets/images/oval.svg';
+import Badge from '../../../assets/images/verified.svg'
+import { ProfileTabs } from '../profile/ProfileTabs';
+import ImageCard from '../../ImageCard';
 import {connect} from 'react-redux';
 
 
-class Profile extends Component {
+class UserLikes extends Component {
     constructor(props) {
         super(props)
         this._isMounted = false;
         this.state = {
             isProfileLoading: true,
-            areUploadsLoading: true,
+            areLikesLoading: true,
             profile: [],
-            uploads: []
+            likes: []
         }
     }
     componentDidMount() {
@@ -28,13 +28,13 @@ class Profile extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-    fetchUploads = () => {
-        unsplash.users.photos(this.state.profile.username, 1, 12)
+    fetchLikes = () => {
+        unsplash.users.likes(this.state.profile.username, 1, 12)
         .then(toJson)
         .then(json => {
             this.setState ({
-                uploads: json,
-                areUploadsLoading: false
+                likes: json,
+                areLikesLoading: false
             })
         })
     }
@@ -45,7 +45,7 @@ class Profile extends Component {
             this._isMounted && this.setState ({
                 profile: json,
                 isProfileLoading: false
-            }, () => this.fetchUploads())
+            }, () => this.fetchLikes())
         });
     }
     render() {
@@ -84,7 +84,7 @@ class Profile extends Component {
                         </header>
                     }
                     <ProfileTabs username={profile.username} photosCount={profile.total_photos} likesCount={profile.total_likes} collectionCount={profile.total_collections} />
-                    {this.state.areUploadsLoading ?
+                    {this.state.areLikesLoading ?
                         <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
                         :
                         <Masonry
@@ -93,7 +93,7 @@ class Profile extends Component {
                         disableImagesLoaded={false}
                         updateOnEachImageLoad={false}
                         >
-                            {this.state.uploads.map(image => {
+                            {this.state.likes.map(image => {
                                 return(
                                     <ImageCard token={this.props.auth.token} key={image.id} image={image} />
                                     )
@@ -109,4 +109,4 @@ class Profile extends Component {
 const mapStateToProps = state => ({
     ...state
 });
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps)(UserLikes);

@@ -42,9 +42,9 @@ ion-icon {
   }
 }
 .photo-details {
-  &-sidebar,
-  &-viewer {
-    height: calc(100vh - 72px);
+  height: calc(100vh - 82px);
+  figcaption {
+    max-width: 800px;
   }
 }
 .spinner {
@@ -63,5 +63,12 @@ ion-icon {
       &:last-child {
         border-radius: 0 .25rem .25rem 0;
       }
+      &:only-child {
+        border-radius: .25rem;
+      }
   }
+}
+.badge {
+  height: 18px;
+  background: #FFF;
 }

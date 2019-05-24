@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { toJson } from "unsplash-js";
-import { unsplash } from '../../utils/Utils';
-import Spinner from '../../assets/images/oval.svg'
-import CollectionCard from './components/CollectionCard';
+import { unsplash } from '../../../utils/Utils';
+import Spinner from '../../../assets/images/oval.svg'
+import CollectionCard from './CollectionCard';
 
 
 class Collections extends Component {

@@ -4,7 +4,7 @@ import { unsplash } from '../../utils/Utils';
 import { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
 import { SearchTabs } from './SearchTabs';
-import CollectionCard from './components/CollectionCard';
+import CollectionCard from './collections/CollectionCard';
 
 class SearchCollections extends Component {
     constructor(props) {
