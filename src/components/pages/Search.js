@@ -42,14 +42,14 @@ class Search extends Component {
         return(
             <main className="mt-24 m-6">
             <section className="px-12">
+            <h1 className="text-3xl">
+                {this.props.match.params.query}
+            </h1>
+            {this.state.results &&
+                <SearchTabs query={this.props.match.params.query} total={this.state.results.total} />
+            }
                 {!this.state.isLoading ?
                     <>
-                        <h1 className="text-3xl">
-                            {this.props.match.params.query}
-                        </h1>
-                        {this.state.results &&
-                            <SearchTabs query={this.props.match.params.query} total={this.state.results.total} />
-                        }
                         <Masonry
                         className={'images-container p-0 -mx-4'} // default ''
                         options={masonryOptions} // default {}
