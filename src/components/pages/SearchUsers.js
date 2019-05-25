@@ -45,14 +45,14 @@ class SearchUsers extends Component {
         return(
             <main className="mt-24 m-6">
             <section className="px-12">
+            <h1 className="text-3xl">
+                {this.props.match.params.query}
+            </h1>
+            {this.state.users.results &&
+                <SearchTabs query={this.props.match.params.query} total={this.state.users.total} />
+            }
                 {!this.state.isLoading ?
                 <>
-                    <h1 className="text-3xl">
-                        {this.props.match.params.query}
-                    </h1>
-                    {this.state.users.results &&
-                        <SearchTabs query={this.props.match.params.query} total={this.state.users.total} />
-                    }
                     <div className="flex flex-wrap -mx-4">
                         {this.state.users.results.map(user => {
                             return(

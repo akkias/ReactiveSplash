@@ -4,7 +4,7 @@ import { unsplash } from '../../utils/Utils';
 import { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
 import { SearchTabs } from './SearchTabs';
-import CollectionCard from './components/CollectionCard';
+import CollectionCard from './collections/CollectionCard';
 
 class SearchCollections extends Component {
     constructor(props) {
@@ -45,14 +45,14 @@ class SearchCollections extends Component {
         return(
             <main className="mt-24 m-6">
             <section className="px-12">
-                {!this.state.isLoading ?
-                <>
                     <h1 className="text-3xl">
                         {this.props.match.params.query}
                     </h1>
                     {this.state.collections &&
                         <SearchTabs query={this.props.match.params.query} total={this.state.collections.total} />
                     }
+                {!this.state.isLoading ?
+                <>
                     <div className="flex flex-wrap -mx-4">
                         {this.state.collections.results.map(collection => {
                             return(

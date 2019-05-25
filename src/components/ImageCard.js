@@ -22,7 +22,7 @@ const ImageCard = (props) => {
                     alt={props.image.alt_description} />
             </Link>
             <div className="mt-1 flex items-center font-semibold">
-                <Link to="/" className="p-1 text-gray-900 hover:text-blue-600">{props.image.user.name}</Link>
+                <Link to={`/${props.image.user.username}`} className="p-1 text-gray-900 hover:text-blue-600">{props.image.user.name}</Link>
                 <button onClick={() => likePhoto(props.image.id)} className="bg-transparent hover:bg-gray-200 flex items-center rounded cursor-pointer font-semibold p-1 ml-auto border-0">
                     <ion-icon class={`align-middle mr-1 ${props.image.liked_by_user && `text-red-600`}`} name={props.image.liked_by_user ? `heart` : `heart-empty`}></ion-icon>{props.image.likes}
                 </button>

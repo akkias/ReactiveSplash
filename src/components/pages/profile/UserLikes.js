@@ -1,40 +1,51 @@
 import React, { Component } from 'react';
+import { toJson } from "unsplash-js";
 import Masonry from 'react-masonry-component';
-import { masonryOptions } from '../../utils/Utils';
-import Spinner from '../../assets/images/oval.svg';
-import { ProfileTabs } from './profile/ProfileTabs';
-import ImageCard from '../ImageCard';
+import { unsplash, masonryOptions } from '../../../utils/Utils';
+import Spinner from '../../../assets/images/oval.svg';
+import { ProfileTabs } from '../profile/ProfileTabs';
+import ImageCard from '../../ImageCard';
 import {connect} from 'react-redux';
-import { fetchUserDetails, fetchUserUploads } from '../../redux/actions/Profile'
-import ProfileHeader from './profile/ProfileHeader';
+import ProfileHeader from './ProfileHeader';
 
 
-class Profile extends Component {
+class UserLikes extends Component {
     constructor(props) {
         super(props)
         this._isMounted = false;
         this.state = {
             isProfileLoading: true,
-            user: [],
-            uploads: []
+            areLikesLoading: true,
+            profile: [],
+            likes: []
         }
     }
     componentDidMount() {
         this._isMounted = true;
         this.fetchProfile();
-        this.fetchUserUploads();
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
-    
-    fetchProfile = () => {
-        let username = this.props.match.params.username;
-        this.props.fetchUserDetails(username);
+    fetchLikes = () => {
+        unsplash.users.likes(this.state.profile.username, 1, 12)
+        .then(toJson)
+        .then(json => {
+            this.setState ({
+                likes: json,
+                areLikesLoading: false
+            })
+        })
     }
-    fetchUserUploads = () => {
-        let username = this.props.match.params.username;
-        this.props.fetchUserUploads(username);
+    fetchProfile = () => {
+        unsplash.users.profile(this.props.match.params.username)
+        .then(toJson)
+        .then(json => {
+            this._isMounted && this.setState ({
+                profile: json,
+                isProfileLoading: false
+            }, () => this.fetchLikes())
+        });
     }
     render() {
         const wrapper = {
@@ -50,22 +61,22 @@ class Profile extends Component {
                         <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
                     }
                     <ProfileTabs username={user.username} photosCount={user.total_photos} likesCount={user.total_likes} collectionCount={user.total_collections} />
-                    {!this.props.user.areUploadsLoading && this.props.user.userUploads?
+                    {this.state.areLikesLoading ?
+                        <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
+                        :
                         <Masonry
                         className={'images-container p-0 mb-24 -mx-4'}
                         options={masonryOptions}
                         disableImagesLoaded={false}
                         updateOnEachImageLoad={false}
                         >
-                            {this.props.user.userUploads.map(image => {
+                            {this.state.likes.map(image => {
                                 return(
                                     <ImageCard token={this.props.auth.token} key={image.id} image={image} />
                                     )
                                     })
                         }
                        </Masonry>
-                        :
-                        <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
                     }
                 </section>
             </main>
@@ -75,8 +86,4 @@ class Profile extends Component {
 const mapStateToProps = state => ({
     ...state
 });
-const mapDispatchToProps = dispatch => ({
-    fetchUserDetails: (username) => dispatch(fetchUserDetails(username)),
-    fetchUserUploads: (username) => dispatch(fetchUserUploads(username))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps)(UserLikes);
