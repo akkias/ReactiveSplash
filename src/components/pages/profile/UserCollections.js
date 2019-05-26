@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { toJson } from "unsplash-js";
-import { unsplash } from '../../../utils/Utils';
 import Spinner from '../../../assets/images/oval.svg';
 import { ProfileTabs } from '../profile/ProfileTabs';
 import {connect} from 'react-redux';

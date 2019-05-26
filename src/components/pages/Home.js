@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
-import { toJson } from "unsplash-js";
 import {connect} from 'react-redux';
-import { unsplash, masonryOptions } from '../../utils/Utils';
+import { masonryOptions } from '../../utils/Utils';
 import Spinner from '../../assets/images/oval.svg';
 import { getPhotos } from '../../redux/actions/HomePhoto';
 
