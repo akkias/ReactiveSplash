@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage'
 import HomePhotoReducer from './HomePhotoReducer';
 import ProfileReducer from './ProfileReducer';
 import CollectionsReducer from './CollectionsReducer';
+import SearchReducer from './SearchReducer';
 
 const authPersistConfig = {
     key: 'auth',
@@ -22,9 +23,15 @@ const collectionsPersistConfig = {
     key: 'collections',
     storage
 }
+const searchPersistConfig = {
+    key: 'search',
+    storage
+}
 export default combineReducers({
     auth: persistReducer(authPersistConfig, AuthReducer),
     home: persistReducer(homePersistConfig, HomePhotoReducer),
     user: persistReducer(userPersistConfig, ProfileReducer),
-    collections: persistReducer(collectionsPersistConfig, CollectionsReducer)
+    collections: persistReducer(collectionsPersistConfig, CollectionsReducer),
+    search: persistReducer(searchPersistConfig, SearchReducer)
+
 });

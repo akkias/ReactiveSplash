@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import ImageCard from '../ImageCard';
 import Masonry from 'react-masonry-component';
-import { unsplash, masonryOptions } from '../../utils/Utils';
+import { masonryOptions } from '../../utils/Utils';
 import {withRouter} from 'react-router-dom';
-import { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
 import { SearchTabs } from './SearchTabs';
+import { connect } from 'react-redux';
+import { searchAll } from '../../redux/actions/SearchActions';
 
 class Search extends Component {
     constructor(props) {
@@ -13,30 +14,23 @@ class Search extends Component {
         this._isMounted = false;
         this.state = {
             isLoading: true,
-            results: []
+            results: {}
         }
     }
     componentDidMount() {
         this._isMounted = true;
-        this.triggerSearch();
+        this.triggerSearchAll();
     }
     componentDidUpdate(prevProps) {
         if(prevProps.match.params.query !== this.props.match.params.query) {
-            this.triggerSearch()
+            this.triggerSearchAll()
         }
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
-    triggerSearch = () => {
-        unsplash.search.photos(this.props.match.params.query, 1, 12)
-        .then(toJson)
-        .then(json => {
-            this.setState ({
-                results: json,
-                isLoading: false
-            })
-        });
+    triggerSearchAll = () => {
+        this.props.searchAll(this.props.match.params.query);
     }
     render() {
         return(
@@ -45,30 +39,39 @@ class Search extends Component {
             <h1 className="text-3xl">
                 {this.props.match.params.query}
             </h1>
-            {this.state.results &&
-                <SearchTabs query={this.props.match.params.query} total={this.state.results.total} />
+            {!this.props.search.isLoading && this.props.search &&
+                <SearchTabs 
+                    query={this.props.match.params.query} 
+                    totalPhotos={this.props.search.results.photos.total}
+                    totalUsers={this.props.search.results.users.total}
+                    totalCollections={this.props.search.results.collections.total} />
             }
-                {!this.state.isLoading ?
-                    <>
-                        <Masonry
-                        className={'images-container p-0 -mx-4'} // default ''
-                        options={masonryOptions} // default {}
-                        disableImagesLoaded={false} // default false
-                        updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-                        >
-                            {this.state.results.results.map(image => {
-                                return(
-                                    <ImageCard key={image.id} image={image} />
-                                )
-                            })
-                        }
-                        </Masonry>
-                    </>
-                    : <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
-                }
+            {!this.props.search.isLoading ?
+                <>
+                    <Masonry
+                    className={'images-container p-0 -mx-4'} // default ''
+                    options={masonryOptions} // default {}
+                    disableImagesLoaded={false} // default false
+                    updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
+                    >
+                        {this.props.search.results.photos.results.map(image => {
+                            return(
+                                <ImageCard key={image.id} image={image} />
+                            )
+                        })
+                    }
+                    </Masonry>
+                </>
+                : <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
+            }
             </section>
         </main>
     )
 }
-}
-export default withRouter(Search);
+}const mapStateToProps = state => ({
+    ...state
+})
+const mapDispatchToProps = dispatch => ({
+    searchAll: (query) => dispatch(searchAll(query))
+})
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Search));

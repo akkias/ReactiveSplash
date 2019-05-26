@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { unsplash } from '../../utils/Utils';
-import { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
 import { SearchTabs } from './SearchTabs';
 import CollectionCard from './collections/CollectionCard';
+import { connect } from 'react-redux';
+import { searchAll } from '../../redux/actions/SearchActions';
 
 class SearchCollections extends Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class SearchCollections extends Component {
         this._isMounted = false;
         this.state = {
             isLoading: true,
-            collections: []
+            results: {}
         }
     }
     componentDidMount() {
@@ -28,44 +28,46 @@ class SearchCollections extends Component {
         this._isMounted = false;
     }
     triggerSearch = () => {
-        unsplash.search.collections(this.props.match.params.query, 1, 12)
-        .then(toJson)
-        .then(json => {
-            this.setState ({
-                collections: json,
-                isLoading: false
-            })
-        });
+        this.props.searchAll(this.props.match.params.query);
     }
     followUser = (id) => {
         alert(id)
     }
     render() {
-        
         return(
             <main className="mt-24 m-6">
-            <section className="px-12">
+                <section className="px-12">
                     <h1 className="text-3xl">
                         {this.props.match.params.query}
                     </h1>
-                    {this.state.collections &&
-                        <SearchTabs query={this.props.match.params.query} total={this.state.collections.total} />
+                    {!this.props.search.isLoading && this.props.search &&
+                        <SearchTabs 
+                            query={this.props.match.params.query} 
+                            totalPhotos={this.props.search.results.photos.total}
+                            totalUsers={this.props.search.results.users.total}
+                            totalCollections={this.props.search.results.collections.total} />
                     }
-                {!this.state.isLoading ?
-                <>
-                    <div className="flex flex-wrap -mx-4">
-                        {this.state.collections.results.map(collection => {
-                            return(
-                                <CollectionCard key={collection.id} collection={collection} />
-                            )
-                        })}
-                    </div>
-                </>
-                : <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
-                }
-            </section>
-        </main>
-    )
+                    {!this.props.search.isLoading ?
+                    <>
+                        <div className="flex flex-wrap -mx-4">
+                            {this.props.search.results.collections.results.map(collection => {
+                                return(
+                                    <CollectionCard key={collection.id} collection={collection} />
+                                )
+                            })}
+                        </div>
+                    </>
+                    : <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
+                    }
+                </section>
+            </main>
+        )
+    }
 }
-}
-export default withRouter(SearchCollections);
+const mapStateToProps = state => ({
+    ...state
+})
+const mapDispatchToProps = dispatch => ({
+    searchAll: (query) => dispatch(searchAll(query))
+})
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SearchCollections));

@@ -21,3 +21,13 @@ export const fetchUserUploads = (username) => dispatch => {
         })
     })
 }
+export const fetchUserCollections = (username) => dispatch => {
+    unsplash.users.photos(username, 1, 12)
+        .then(toJson)
+        .then(json => {
+            dispatch({
+                type: 'FETCH_USER_COLLECTIONS',
+                payload: json,
+            })
+        })
+}
