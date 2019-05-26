@@ -32,6 +32,13 @@ class Photo extends Component {
     likeCurrentPhoto = (token, id)  => {
         this.props.likePhoto(token, id)
     }
+    downloadPhoto = (id) => {
+        unsplash.photos.getPhoto(id)
+        .then(toJson)
+        .then(json => {
+            unsplash.photos.downloadPhoto(json);
+        });
+    }
     render() {
         return(
             <main className="pt-12 mb-0 m-6">
@@ -56,13 +63,15 @@ class Photo extends Component {
                                         </div>
                                     </Link>
                                     <div className="border border-l-0 border-r-0 border-solid border-gray-300 py-4 mt-4 flex justify-center">
-                                        <button onClick={() => this.likeCurrentPhoto(this.props.auth.token, this.state.photoDetails.id)} className="w-1/3 bg-white hover:text-blue-600 border-0 text-sm px-4 py-2 leading-none rounded cursor-pointer shadow">
-                                            <ion-icon class={`align-middle mr-1 ${this.state.photoDetails.liked_by_user && `text-red-600`}`} name={this.state.photoDetails.liked_by_user ? `heart` : `heart-empty`}></ion-icon>{this.state.photoDetails.likes}
-                                        </button>
+                                        {this.props.auth.isAuthenticated &&
+                                            <button onClick={() => this.likeCurrentPhoto(this.props.auth.token, this.state.photoDetails.id)}  className="w-1/3 bg-white hover:text-blue-600 border-0 text-sm px-4 py-2 leading-none rounded cursor-pointer shadow">
+                                                <ion-icon class={`align-middle mr-1 ${this.state.photoDetails.liked_by_user && `text-red-600`}`} name={this.state.photoDetails.liked_by_user ? `heart` : `heart-empty`}></ion-icon>{this.state.photoDetails.likes}
+                                            </button>
+                                        }
                                         <button className="w-1/3 bg-white hover:text-blue-600 border-0 text-sm px-4 py-2 leading-none rounded mx-4 cursor-pointer shadow">
                                             <ion-icon class="align-middle mr-1" name="add"></ion-icon>Collect
                                         </button>
-                                        <button className="w-1/3 bg-white hover:text-blue-600 border-0 text-sm px-4 py-2 leading-none rounded cursor-pointer shadow">
+                                        <button onClick={(id) => this.downloadPhoto(this.state.photoDetails.id)} className="w-1/3 bg-white hover:text-blue-600 border-0 text-sm px-4 py-2 leading-none rounded cursor-pointer shadow">
                                             <ion-icon class="align-middle mr-1" name="arrow-round-down"></ion-icon>Download
                                         </button>
                                     </div>

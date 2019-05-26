@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { unsplash } from '../../utils/Utils';
-import { toJson } from "unsplash-js";
 import Spinner from '../../assets/images/oval.svg'
 import { UserCard } from './UserCard';
 import { SearchTabs } from './SearchTabs';
+import { connect } from 'react-redux';
+import { searchAll } from '../../redux/actions/SearchActions';
 
 class SearchUsers extends Component {
     constructor(props) {
@@ -28,14 +28,7 @@ class SearchUsers extends Component {
         this._isMounted = false;
     }
     triggerSearch = () => {
-        unsplash.search.users(this.props.match.params.query, 1, 12)
-        .then(toJson)
-        .then(json => {
-            this.setState ({
-                users: json,
-                isLoading: false
-            })
-        });
+        this.props.searchAll(this.props.match.params.query);
     }
     followUser = (id) => {
         alert(id)
@@ -48,13 +41,17 @@ class SearchUsers extends Component {
             <h1 className="text-3xl">
                 {this.props.match.params.query}
             </h1>
-            {this.state.users.results &&
-                <SearchTabs query={this.props.match.params.query} total={this.state.users.total} />
-            }
-                {!this.state.isLoading ?
+                {!this.props.search.isLoading && this.props.search &&
+                    <SearchTabs 
+                        query={this.props.match.params.query} 
+                        totalPhotos={this.props.search.results.photos.total}
+                        totalUsers={this.props.search.results.users.total}
+                        totalCollections={this.props.search.results.collections.total} />
+                }
+                {!this.props.search.isLoading ?
                 <>
                     <div className="flex flex-wrap -mx-4">
-                        {this.state.users.results.map(user => {
+                        {this.props.search.results.users.results.map(user => {
                             return(
                                 <UserCard key={user.id} followUser={(id) => this.followUser(id)} user={user} />
                             )
@@ -68,4 +65,10 @@ class SearchUsers extends Component {
     )
 }
 }
-export default withRouter(SearchUsers);
+const mapStateToProps = state => ({
+    ...state
+})
+const mapDispatchToProps = dispatch => ({
+    searchAll: (query) => dispatch(searchAll(query))
+})
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SearchUsers));

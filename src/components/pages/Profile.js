@@ -50,14 +50,14 @@ class Profile extends Component {
                         <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
                     }
                     <ProfileTabs username={user.username} photosCount={user.total_photos} likesCount={user.total_likes} collectionCount={user.total_collections} />
-                    {!this.props.user.areUploadsLoading && this.props.user.userUploads?
+                    {!this.props.user.areUploadsLoading && this.props.user.uploads?
                         <Masonry
                         className={'images-container p-0 mb-24 -mx-4'}
                         options={masonryOptions}
                         disableImagesLoaded={false}
                         updateOnEachImageLoad={false}
                         >
-                            {this.props.user.userUploads.map(image => {
+                            {this.props.user.uploads.map(image => {
                                 return(
                                     <ImageCard token={this.props.auth.token} key={image.id} image={image} />
                                     )

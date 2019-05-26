@@ -6,6 +6,7 @@ import { ProfileTabs } from '../profile/ProfileTabs';
 import {connect} from 'react-redux';
 import CollectionCard from '../collections/CollectionCard';
 import ProfileHeader from './ProfileHeader';
+import { fetchUserCollections } from '../../../redux/actions/Profile';
 
 
 class UserCollections extends Component {
@@ -21,30 +22,14 @@ class UserCollections extends Component {
     }
     componentDidMount() {
         this._isMounted = true;
-        this.fetchProfile();
+        this.fetchCollections();
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
     fetchCollections = () => {
-        unsplash.users.collections(this.state.profile.username, 1, 15)
-        .then(toJson)
-        .then(json => {
-            this.setState ({
-                collections: json,
-                areUploadsLoading: false
-            })
-        })
-    }
-    fetchProfile = () => {
-        unsplash.users.profile(this.props.match.params.username)
-        .then(toJson)
-        .then(json => {
-            this._isMounted && this.setState ({
-                profile: json,
-                isProfileLoading: false
-            }, () => this.fetchCollections())
-        });
+        let username = this.props.match.params.username;
+        this.props.fetchUserCollections(username);
     }
     render() {
         const wrapper = {
@@ -54,14 +39,14 @@ class UserCollections extends Component {
         return(
             <main className="mx-6" style={wrapper}>
                 <section className="px-12">
-                    {!this.props.user.isLoading ?
+                    {!this.props.user.isLoading && this.props.user.userDetails.length ?
                         <ProfileHeader user={user} />
                         :
                         <img alt="Loading" className="mx-auto spinner fixed" src={Spinner} />
                     }
                     <ProfileTabs username={user.username} photosCount={user.total_photos} likesCount={user.total_likes} collectionCount={user.total_collections} />
                     <div className="flex flex-wrap -mx-4">
-                        {this.state.collections.map(collection => 
+                        {!this.props.user.isLoading && this.props.user.collections.map(collection => 
                             <CollectionCard collection={collection} key={collection.id} />
                         )}
                     </div>
@@ -73,4 +58,7 @@ class UserCollections extends Component {
 const mapStateToProps = state => ({
     ...state
 });
-export default connect(mapStateToProps)(UserCollections);
+const mapDispatchToProps = dispatch => ({
+    fetchUserCollections: (username) => dispatch(fetchUserCollections(username))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(UserCollections);
